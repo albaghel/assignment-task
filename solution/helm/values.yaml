@@ -1,0 +1,119 @@
+# Global settings
+image:
+  repository: nebula-aurora-assignment
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: localhost
+      paths:
+        - path: /users
+          pathType: Prefix
+        - path: /posts
+          pathType: Prefix
+        - path: /grafana
+          pathType: Prefix
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Database Configuration (PostgreSQL subchart)
+postgresql:
+  image:
+    tag: latest
+  enabled: true
+  auth:
+    username: app_user
+    password: app_password
+    database: app_db
+  primary:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    persistence:
+      enabled: false
+
+# Monitoring Configuration (kube-prometheus-stack subchart)
+monitoring:
+  enabled: true
+
+kube-prometheus-stack:
+  
+  # Resource optimization
+  alertmanager:
+    enabled: false
+  nodeExporter:
+    enabled: false
+  kubeStateMetrics:
+    enabled: true
+
+  # Prometheus Configuration
+  prometheus:
+    prometheusSpec:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+      # FastAPI metrics target
+      additionalScrapeConfigs:
+        - job_name: 'fastapi'
+          static_configs:
+            - targets: ['nebula-aurora-assignment:8000'] 
+  
+  # Grafana Configuration
+  grafana:
+    enabled: true
+    adminPassword: "admin"
+    
+    # Path configuration for ingress
+    grafana.ini:
+      server:
+        root_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+        serve_from_sub_path: true
+    
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+    
+    # Dashboard Provisioning
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
+        folder: /tmp/dashboards
+    
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
