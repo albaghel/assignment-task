@@ -43,8 +43,24 @@ To run locally without Docker:
 
 *   **Prerequisites**
     *   Docker
+    installation: sudo apt install docker.io -y 
+    sudo usermod -aG docker $USER
+    sudo init 6 (for restart the ubuntu)
+
     *   Kubernetes (Kind/Minikube)
+    *   Installation: curl -Lo kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
+         chmod +x kind
+         sudo mv kind /usr/local/bin/
+        kind version
+        kind create cluster
+
+    
     *   Helm 3
+    *   Installation:
+         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+         helm version
+
+         **Now nevigate to solution directory and run all the commands in it**
 
 *   **Step 1: Build Image**
     *   Run: `docker build -t nebula-aurora-assignment:latest ./app`
