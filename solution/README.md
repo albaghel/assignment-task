@@ -37,7 +37,8 @@ To run locally without Docker:
     2.  Create env: `python3 -m venv .venv` and `source .venv/bin/activate`.
     3.  Install: `pip install -r requirements.txt`.
     4.  Run: `uvicorn app.main:app --reload --port 8000`.
-
+    5.  Now check on your local machine url will be http://127.0.0.1:8000
+     
 ## Part 2: Production Deployment (Kubernetes)
 
 *   **Prerequisites**
