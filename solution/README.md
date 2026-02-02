@@ -68,7 +68,7 @@ To run locally without Docker:
     
     *   Helm 3
     *   Installation:
-         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
          helm version
 
          **Now nevigate to solution directory and run all the commands in it**
