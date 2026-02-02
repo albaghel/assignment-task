@@ -47,6 +47,17 @@ To run locally without Docker:
     sudo usermod -aG docker $USER
     sudo init 6 (for restart the ubuntu)
 
+    * Kubectl
+    * Installation:
+      sudo apt update
+      sudo apt install -y ca-certificates curl
+      curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      chmod +x kubectl
+      sudo mv kubectl /usr/local/bin/
+      kubectl version --client
+
+
+
     *   Kubernetes (Kind/Minikube)
     *   Installation: curl -Lo kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
          chmod +x kind
